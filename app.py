@@ -4,6 +4,22 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 
 def doc_code(code_str,chat)->str:
+    """
+    Takes a code string and a chat input, splits the code into lines based on a
+    file type, runs future code documentation on each line, and returns the combined
+    results as a string.
+
+    Args:
+        code_str (str): Passed as input to the function, representing a string
+            containing code.
+        chat (str): Passed to the `work.doc_futures_run` method, which implies it
+            is used for documentation or running code in a chat environment.
+
+    Returns:
+        str: A string containing the results of executing code snippets from the
+        input `code_str`, processed according to the file type specified in `st.session_state.file_type`.
+
+    """
     spliter = work.get_file_type(st.session_state.file_type)
     code_split_ = work.code_splite(code_str,spliter)
     result = ""
@@ -13,6 +29,22 @@ def doc_code(code_str,chat)->str:
     return result
 
 def code_with_comment(code_str,chat)->str:
+    """
+    Takes a code string and chat input, splits the code into lines based on its
+    type, adds comments for future runs, and returns the modified code with comments.
+
+    Args:
+        code_str (str): A string containing the code to be processed, likely a
+            string representation of a code snippet or a file.
+        chat (str): Used to pass a string containing chat messages or other
+            information to be used in conjunction with the code splitting and
+            commenting process.
+
+    Returns:
+        str: A string containing the commented code split into lines from the input
+        code string.
+
+    """
     spliter = work.get_file_type(st.session_state.file_type)
     code_split_ = work.code_splite(code_str,spliter)
     result = ""
@@ -22,6 +54,24 @@ def code_with_comment(code_str,chat)->str:
     return result
 
 def qa_with_code(question:str,code_str,chat)->str:
+    """
+    Processes user input by splitting code into segments based on file type,
+    generates embeddings, and then uses a code-chain model to answer a question
+    related to the code, returning the result.
+
+    Args:
+        question (str): Passed to the `work.qa_with_code_chain` function, where
+            it is used as a query to retrieve an answer from a knowledge base.
+        code_str (str): Expected to be a string containing code that needs to be
+            processed, split, and used in the QA process.
+        chat (str): Used as input for the `work.qa_with_code_chain` function, which
+            implies it is a string representing a chat or conversation.
+
+    Returns:
+        str: The result of the question answering process with the given code and
+        question.
+
+    """
     spliter = work.get_file_type(st.session_state.file_type)
     code_split_ = work.code_splite(code_str,spliter)
     db = work.get_code_embd_save(code_split_)
